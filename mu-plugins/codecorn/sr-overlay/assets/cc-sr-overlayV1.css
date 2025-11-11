@@ -1,0 +1,322 @@
+/* =========================================================
+ * CC Slider Revolution Overlay Engine
+ * Autore  : CodeCorn™
+ * Scopo   : Overlay unificato , modulare e DRY per Slider Revolution .
+ *
+ * Uso base :
+ *   - aggiungi la classe  cc-sr-overlay  al modulo SR
+ *   - aggiungi una delle combo  cc-sr-o-*  come preset
+ *
+ * Esempio :
+ *   cc-sr-overlay cc-sr-o-bottom-dark-strong
+ * =======================================================*/
+
+/* ---------------------------------------------------------
+ * 1 ) Base per tutti i moduli con overlay
+ *     Rende l area del background posizionabile e clipper
+ * ------------------------------------------------------ */
+
+.cc-sr-overlay rs-sbg-px {
+  position: relative;
+  overflow: hidden;
+}
+
+/* opzionale , per varianti di markup future */
+.cc-sr-overlay rs-sbg {
+  position: relative;
+  overflow: hidden;
+}
+
+/* ---------------------------------------------------------
+ * 2 ) Variabili di default
+ *     Default = gradient top → trasparente , nero
+ * ------------------------------------------------------ */
+
+.cc-sr-overlay {
+  /* opacità dei tre punti chiave del gradient */
+  --sr-overlay-top: 0.75;    /* 0 %   , parte alta visiva   */
+  --sr-overlay-mid: 0.40;    /* step intermedio             */
+  --sr-overlay-bottom: 0.00; /* 100 % , parte bassa visiva  */
+
+  /* dove cade lo step intermedio */
+  --sr-overlay-mid-pos: 40%;
+
+  /* direzione del gradient :
+     di default  to bottom  ,
+     quindi 0 % = alto , 100 % = basso */
+  --sr-overlay-direction: to bottom;
+
+  /* colore base dell overlay ( RGB puro ) */
+  --sr-overlay-color-r: 0;
+  --sr-overlay-color-g: 0;
+  --sr-overlay-color-b: 0;
+}
+
+/* ---------------------------------------------------------
+ * 3 ) Overlay vero e proprio
+ *     Sempre sopra il background , mai sopra i layer
+ * ------------------------------------------------------ */
+
+.cc-sr-overlay rs-sbg-px::before,
+.cc-sr-overlay rs-sbg::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    var( --sr-overlay-direction ),
+    rgba(
+      var( --sr-overlay-color-r ),
+      var( --sr-overlay-color-g ),
+      var( --sr-overlay-color-b ),
+      var( --sr-overlay-top )
+    ) 0%,
+    rgba(
+      var( --sr-overlay-color-r ),
+      var( --sr-overlay-color-g ),
+      var( --sr-overlay-color-b ),
+      var( --sr-overlay-mid )
+    ) var( --sr-overlay-mid-pos ),
+    rgba(
+      var( --sr-overlay-color-r ),
+      var( --sr-overlay-color-g ),
+      var( --sr-overlay-color-b ),
+      var( --sr-overlay-bottom )
+    ) 100%
+  );
+  pointer-events: none;
+  z-index: 1; /* sopra il bg , sotto i layer */
+}
+
+/* =========================================================
+ * 4 ) PRESET A MATRICE
+ *
+ * Naming logico :
+ *   cc-sr-o-[posizione]-[tono]-[intensità]
+ *
+ * posizione : top , bottom , center , solid
+ * tono      : dark , light
+ * intensità : soft , strong
+ *
+ * Tutti i preset vanno usati SEMPRE con :
+ *   cc-sr-overlay
+ *
+ * Esempi :
+ *   cc-sr-overlay cc-sr-o-top-dark-strong
+ *   cc-sr-overlay cc-sr-o-bottom-dark-soft
+ *   cc-sr-overlay cc-sr-o-solid-light-soft
+ * =======================================================*/
+
+/* ---------------------------------------------------------
+ * 4 . 1  Tono colore
+ * ------------------------------------------------------ */
+
+/* nero */
+.cc-sr-o-dark {
+  --sr-overlay-color-r: 0;
+  --sr-overlay-color-g: 0;
+  --sr-overlay-color-b: 0;
+}
+
+/* bianco */
+.cc-sr-o-light {
+  --sr-overlay-color-r: 255;
+  --sr-overlay-color-g: 255;
+  --sr-overlay-color-b: 255;
+}
+
+/* se nessun tono è specificato , default = dark */
+.cc-sr-overlay:not( .cc-sr-o-light ) {
+  --sr-overlay-color-r: 0;
+  --sr-overlay-color-g: 0;
+  --sr-overlay-color-b: 0;
+}
+
+/* ---------------------------------------------------------
+ * 4 . 2  SOLIDI
+ * ------------------------------------------------------ */
+
+/* SOLID DARK STRONG : nero pieno */
+.cc-sr-o-solid-dark-strong,
+.cc-sr-o-solid-strong { /* alias compatibilità */
+  --sr-overlay-top: 0.80;
+  --sr-overlay-mid: 0.80;
+  --sr-overlay-bottom: 0.80;
+  --sr-overlay-mid-pos: 50%;
+  --sr-overlay-direction: to bottom;
+  --sr-overlay-color-r: 0;
+  --sr-overlay-color-g: 0;
+  --sr-overlay-color-b: 0;
+}
+
+/* SOLID DARK SOFT : velatura leggera */
+.cc-sr-o-solid-dark-soft,
+.cc-sr-o-solid-soft { /* alias compatibilità */
+  --sr-overlay-top: 0.45;
+  --sr-overlay-mid: 0.45;
+  --sr-overlay-bottom: 0.45;
+  --sr-overlay-mid-pos: 50%;
+  --sr-overlay-direction: to bottom;
+  --sr-overlay-color-r: 0;
+  --sr-overlay-color-g: 0;
+  --sr-overlay-color-b: 0;
+}
+
+/* SOLID LIGHT SOFT : overlay bianco morbido , utile su foto scure */
+.cc-sr-o-solid-light-soft {
+  --sr-overlay-top: 0.35;
+  --sr-overlay-mid: 0.35;
+  --sr-overlay-bottom: 0.35;
+  --sr-overlay-mid-pos: 50%;
+  --sr-overlay-direction: to bottom;
+  --sr-overlay-color-r: 255;
+  --sr-overlay-color-g: 255;
+  --sr-overlay-color-b: 255;
+}
+
+/* SOLID LIGHT STRONG : bianco molto intenso */
+.cc-sr-o-solid-light-strong {
+  --sr-overlay-top: 0.70;
+  --sr-overlay-mid: 0.70;
+  --sr-overlay-bottom: 0.70;
+  --sr-overlay-mid-pos: 50%;
+  --sr-overlay-direction: to bottom;
+  --sr-overlay-color-r: 255;
+  --sr-overlay-color-g: 255;
+  --sr-overlay-color-b: 255;
+}
+
+/* ---------------------------------------------------------
+ * 4 . 3  GRADIENT DALL ALTO ( TOP → BASSO )
+ * ------------------------------------------------------ */
+
+/* TOP DARK STRONG : parte alta molto scura , basso trasparente */
+.cc-sr-o-top-dark-strong,
+.cc-sr-o-grad-top-strong { /* alias compatibilità */
+  --sr-overlay-top: 0.90;
+  --sr-overlay-mid: 0.75;
+  --sr-overlay-bottom: 0.00;
+  --sr-overlay-mid-pos: 40%;
+  --sr-overlay-direction: to bottom;
+  --sr-overlay-color-r: 0;
+  --sr-overlay-color-g: 0;
+  --sr-overlay-color-b: 0;
+}
+
+/* TOP DARK SOFT : più delicato */
+.cc-sr-o-top-dark-soft,
+.cc-sr-o-grad-top-soft { /* alias compatibilità */
+  --sr-overlay-top: 0.60;
+  --sr-overlay-mid: 0.40;
+  --sr-overlay-bottom: 0.00;
+  --sr-overlay-mid-pos: 40%;
+  --sr-overlay-direction: to bottom;
+  --sr-overlay-color-r: 0;
+  --sr-overlay-color-g: 0;
+  --sr-overlay-color-b: 0;
+}
+
+/* TOP LIGHT SOFT : overlay chiaro in alto , utile per testi scuri */
+.cc-sr-o-top-light-soft {
+  --sr-overlay-top: 0.45;
+  --sr-overlay-mid: 0.25;
+  --sr-overlay-bottom: 0.00;
+  --sr-overlay-mid-pos: 40%;
+  --sr-overlay-direction: to bottom;
+  --sr-overlay-color-r: 255;
+  --sr-overlay-color-g: 255;
+  --sr-overlay-color-b: 255;
+}
+
+/* ---------------------------------------------------------
+ * 4 . 4  GRADIENT DAL BASSO ( BOTTOM → ALTO )
+ * ------------------------------------------------------ */
+
+/* BOTTOM DARK STRONG : nero forte in basso , svanisce verso l alto */
+.cc-sr-o-bottom-dark-strong {
+  --sr-overlay-top: 0.00;  /* alto trasparente */
+  --sr-overlay-mid: 0.60;
+  --sr-overlay-bottom: 0.90; /* basso molto scuro */
+  --sr-overlay-mid-pos: 60%;
+  --sr-overlay-direction: to bottom;
+  --sr-overlay-color-r: 0;
+  --sr-overlay-color-g: 0;
+  --sr-overlay-color-b: 0;
+}
+
+/* BOTTOM DARK SOFT : versione più morbida */
+.cc-sr-o-bottom-dark-soft,
+.cc-sr-o-grad-bottom-soft { /* alias compatibilità */
+  --sr-overlay-top: 0.00;
+  --sr-overlay-mid: 0.35;
+  --sr-overlay-bottom: 0.60;
+  --sr-overlay-mid-pos: 60%;
+  --sr-overlay-direction: to bottom;
+  --sr-overlay-color-r: 0;
+  --sr-overlay-color-g: 0;
+  --sr-overlay-color-b: 0;
+}
+
+/* BOTTOM LIGHT SOFT : luce bianca dal basso */
+.cc-sr-o-bottom-light-soft {
+  --sr-overlay-top: 0.00;
+  --sr-overlay-mid: 0.25;
+  --sr-overlay-bottom: 0.45;
+  --sr-overlay-mid-pos: 60%;
+  --sr-overlay-direction: to bottom;
+  --sr-overlay-color-r: 255;
+  --sr-overlay-color-g: 255;
+  --sr-overlay-color-b: 255;
+}
+
+/* ---------------------------------------------------------
+ * 4 . 5  VIGNETTE CENTRALE ( CENTER )
+ * ------------------------------------------------------ */
+
+/* CENTER DARK SOFT : centro più scuro , bordi più chiari */
+.cc-sr-o-center-dark-soft,
+.cc-sr-o-vignette { /* alias compatibilità */
+  --sr-overlay-top: 0.00;
+  --sr-overlay-mid: 0.55;
+  --sr-overlay-bottom: 0.00;
+  --sr-overlay-mid-pos: 50%;
+  --sr-overlay-direction: to bottom;
+  --sr-overlay-color-r: 0;
+  --sr-overlay-color-g: 0;
+  --sr-overlay-color-b: 0;
+}
+
+/* CENTER DARK STRONG : stessa cosa ma più intensa */
+.cc-sr-o-center-dark-strong {
+  --sr-overlay-top: 0.00;
+  --sr-overlay-mid: 0.80;
+  --sr-overlay-bottom: 0.00;
+  --sr-overlay-mid-pos: 50%;
+  --sr-overlay-direction: to bottom;
+  --sr-overlay-color-r: 0;
+  --sr-overlay-color-g: 0;
+  --sr-overlay-color-b: 0;
+}
+
+/* CENTER LIGHT SOFT : vignetta chiara centrale */
+.cc-sr-o-center-light-soft {
+  --sr-overlay-top: 0.00;
+  --sr-overlay-mid: 0.45;
+  --sr-overlay-bottom: 0.00;
+  --sr-overlay-mid-pos: 50%;
+  --sr-overlay-direction: to bottom;
+  --sr-overlay-color-r: 255;
+  --sr-overlay-color-g: 255;
+  --sr-overlay-color-b: 255;
+}
+
+/* =========================================================
+ * 5 ) ESEMPI DI MAPPATURA PROGETTO
+ *     ( solo commenti , per documentazione interna )
+ *
+ * SLIDER HOME HERO       : cc-sr-overlay cc-sr-o-top-dark-strong
+ * SLIDER PAGINA FAQ      : cc-sr-overlay cc-sr-o-solid-dark-soft
+ * SLIDER LANDING DARK    : cc-sr-overlay cc-sr-o-solid-dark-strong
+ * SLIDER LIGHT FOOTER    : cc-sr-overlay cc-sr-o-bottom-dark-soft
+ * SLIDER GALLERY CHIARA  : cc-sr-overlay cc-sr-o-top-light-soft
+ * SLIDER FULLSCREEN SCURO: cc-sr-overlay cc-sr-o-center-dark-strong
+ * =======================================================*/
