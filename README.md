@@ -1,6 +1,6 @@
 # CC Slider Revolution Overlay Engine
 
-[![Version](https://img.shields.io/badge/version-1.0.0-blue.svg)](https://github.com/CodeCornTech/cc-revslider-overlay-engine)
+[![Version](https://img.shields.io/badge/version-1.0.1-blue.svg)](https://github.com/CodeCornTech/cc-revslider-overlay-engine)
 [![License](https://img.shields.io/badge/license-GPL--2.0%2B-green.svg)](LICENSE)
 [![Author](https://img.shields.io/badge/author-CodeCorn%E2%84%A2%20Technology-orange.svg)](https://github.com/CodeCornTech)
 
