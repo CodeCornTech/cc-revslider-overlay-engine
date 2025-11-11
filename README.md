@@ -1,5 +1,9 @@
 # CC Slider Revolution Overlay Engine
 
+[![Version](https://img.shields.io/badge/version-1.0.0-blue.svg)](https://github.com/CodeCornTech/cc-revslider-overlay-engine)
+[![License](https://img.shields.io/badge/license-GPL--2.0%2B-green.svg)](LICENSE)
+[![Author](https://img.shields.io/badge/author-CodeCorn%E2%84%A2%20Technology-orange.svg)](https://github.com/CodeCornTech)
+
 Motore CSS a variabili per gestire **overlay globali** su Slider Revolution in modo DRY , leggibile e riutilizzabile .
 
 Niente più copia incolla di 10 overlay diversi per ogni slider , ma :
@@ -33,6 +37,28 @@ Niente più copia incolla di 10 overlay diversi per ogni slider , ma :
   - oppure tramite pannello Custom CSS del tema o di SR
 
 ---
+
+## 📦 Repository e struttura
+
+**GitHub:** [https://github.com/CodeCornTech/cc-revslider-overlay-engine](https://github.com/CodeCornTech/cc-revslider-overlay-engine)
+
+Struttura tipica se installato come MU-plugin:
+
+```
+
+mu-plugins/
+├── mu-cc-sr-overlay.php
+└── codecorn/
+└── sr-overlay/
+├── assets/
+│   └── cc-sr-overlay.css
+└── index.php
+
+```
+
+---
+
+Oppure come CSS standalone nel tuo tema child.
 
 ## Installazione
 
@@ -200,3 +226,22 @@ Così tu o chiunque tocchi il progetto vede al volo cosa monta ogni slider senza
 - Versione SCSS con mixin e map dei preset
 
 Pull request graditissime ✨
+
+---
+
+## 🧩 Credits
+
+**Autore:** [Federico Girolami](https://github.com/FedericoGirolami)  
+**Team:** [CodeCorn™ Technology](https://github.com/CodeCornTech)  
+**Progetto:** CC Slider Revolution Overlay Engine  
+**Repository:** [CodeCornTech/cc-revslider-overlay-engine](https://github.com/CodeCornTech/cc-revslider-overlay-engine)
+
+---
+
+## 🪪 Licenza
+
+Distribuito sotto licenza **GPL-2.0 o successiva**.  
+Puoi usarlo liberamente, modificarlo e ridistribuirlo, mantenendo il credito a **CodeCorn™ Technology**.  
+© 2025 — CodeCorn™ Technology. Tutti i diritti riservati.
+
+---
