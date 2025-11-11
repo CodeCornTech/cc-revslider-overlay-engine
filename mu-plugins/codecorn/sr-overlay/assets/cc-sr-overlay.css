@@ -1,138 +1,130 @@
 /* =========================================================
  * CC Slider Revolution Overlay Engine
- * Autore : CodeCorn™
- * Scopo  : Overlay unificato , modulare e DRY per Slider Revolution .
+ * Autore  : CodeCorn™
+ * Scopo   : Overlay modulare e DRY per Slider Revolution
  *
- * Usa la classe .cc-sr-overlay sul modulo SR
- * + una delle combo .cc-sr-o-*
+ * Naming : cc-sr-o-[posizione]-[tono]-[intensità]
+ * posizione : top | bottom | left | right | center | solid
+ * tono       : dark | light
+ * intensità  : soft | medium | strong
  * =======================================================*/
 
-/* 1 ) Base per tutti i moduli con overlay */
-.cc-sr-overlay rs-sbg-px {
+/* BASE */
+.cc-sr-overlay rs-sbg-px,
+.cc-sr-overlay rs-sbg {
   position: relative;
   overflow: hidden;
 }
 
-/* 2 ) Valori di default ( gradient top → trasparente ) */
 .cc-sr-overlay {
-  /* opacità dei tre punti chiave del gradient */
-  --sr-overlay-top: 0.75;    /* 0 % */
-  --sr-overlay-mid: 0.40;    /* posizione intermedia */
-  --sr-overlay-bottom: 0.00; /* 100 % */
-
-  /* dove cade lo step intermedio */
+  --sr-overlay-top: .75;
+  --sr-overlay-mid: .40;
+  --sr-overlay-bottom: 0;
   --sr-overlay-mid-pos: 40%;
-
-  /* direzione del gradient */
   --sr-overlay-direction: to bottom;
-
-  /* colore base dell overlay ( RGB puro ) */
   --sr-overlay-color-r: 0;
   --sr-overlay-color-g: 0;
   --sr-overlay-color-b: 0;
 }
 
-/* 3 ) Overlay vero e proprio , sempre e solo sopra il background */
-.cc-sr-overlay rs-sbg-px::before {
+.cc-sr-overlay rs-sbg-px::before,
+.cc-sr-overlay rs-sbg::before {
   content: "";
   position: absolute;
   inset: 0;
   background: linear-gradient(
     var(--sr-overlay-direction),
-    rgba(
-      var(--sr-overlay-color-r),
-      var(--sr-overlay-color-g),
-      var(--sr-overlay-color-b),
-      var(--sr-overlay-top)
-    ) 0%,
-    rgba(
-      var(--sr-overlay-color-r),
-      var(--sr-overlay-color-g),
-      var(--sr-overlay-color-b),
-      var(--sr-overlay-mid)
-    ) var(--sr-overlay-mid-pos),
-    rgba(
-      var(--sr-overlay-color-r),
-      var(--sr-overlay-color-g),
-      var(--sr-overlay-color-b),
-      var(--sr-overlay-bottom)
-    ) 100%
+    rgba(var(--sr-overlay-color-r), var(--sr-overlay-color-g), var(--sr-overlay-color-b), var(--sr-overlay-top)) 0%,
+    rgba(var(--sr-overlay-color-r), var(--sr-overlay-color-g), var(--sr-overlay-color-b), var(--sr-overlay-mid)) var(--sr-overlay-mid-pos),
+    rgba(var(--sr-overlay-color-r), var(--sr-overlay-color-g), var(--sr-overlay-color-b), var(--sr-overlay-bottom)) 100%
   );
   pointer-events: none;
-  z-index: 1; /* sopra il bg , sotto i layer che stanno fuori da rs-sbg-px */
+  z-index: 1;
 }
 
 /* =========================================================
- * PRESET PRONTI ALL USO
- *
- * Usa sempre :
- *   .cc-sr-overlay + uno dei seguenti :
- *
- *   .cc-sr-o-solid-strong
- *   .cc-sr-o-solid-soft
- *   .cc-sr-o-grad-top-strong
- *   .cc-sr-o-grad-top-soft
- *   .cc-sr-o-grad-bottom-soft
- *   .cc-sr-o-vignette
+ * TONI BASE
  * =======================================================*/
 
-/* ✅ SOLIDO FORTE ( nero fisso ) */
-.cc-sr-o-solid-strong {
-  --sr-overlay-top: 0.75;
-  --sr-overlay-mid: 0.75;
-  --sr-overlay-bottom: 0.75;
-  --sr-overlay-mid-pos: 50%;
-}
-
-/* ✅ SOLIDO SOFT ( velatura leggera ) */
-.cc-sr-o-solid-soft {
-  --sr-overlay-top: 0.45;
-  --sr-overlay-mid: 0.45;
-  --sr-overlay-bottom: 0.45;
-  --sr-overlay-mid-pos: 50%;
-}
-
-/* ✅ GRADIENT TOP STRONG ( 0 % → 40 % nero forte , poi trasparente ) */
-.cc-sr-o-grad-top-strong {
-  --sr-overlay-top: 0.85;
-  --sr-overlay-mid: 0.75;
-  --sr-overlay-bottom: 0.00;
-  --sr-overlay-mid-pos: 40%;
-  --sr-overlay-direction: to bottom;
-}
-
-/* ✅ GRADIENT TOP SOFT ( più delicato ) */
-.cc-sr-o-grad-top-soft {
-  --sr-overlay-top: 0.55;
-  --sr-overlay-mid: 0.35;
-  --sr-overlay-bottom: 0.00;
-  --sr-overlay-mid-pos: 40%;
-  --sr-overlay-direction: to bottom;
-}
-
-/* ✅ GRADIENT BOTTOM SOFT ( luce in alto , scuro in basso ) */
-.cc-sr-o-grad-bottom-soft {
-  --sr-overlay-direction: to top;
-  --sr-overlay-top: 0.55;   /* in alto , ma il gradient va "to top" quindi è la parte bassa visiva */
-  --sr-overlay-mid: 0.30;
-  --sr-overlay-bottom: 0.00;
-  --sr-overlay-mid-pos: 40%;
-}
-
-/* ✅ VIGNETTE CENTRALE ( più scuro al centro , trasparente in alto e in basso ) */
-.cc-sr-o-vignette {
-  --sr-overlay-direction: to bottom;
-  --sr-overlay-top: 0.00;
-  --sr-overlay-mid: 0.55;
-  --sr-overlay-bottom: 0.00;
-  --sr-overlay-mid-pos: 50%;
-}
+.cc-sr-o-dark  { --sr-overlay-color-r: 0;   --sr-overlay-color-g: 0;   --sr-overlay-color-b: 0;   }
+.cc-sr-o-light { --sr-overlay-color-r: 255; --sr-overlay-color-g: 255; --sr-overlay-color-b: 255; }
 
 /* =========================================================
- * ESEMPI DI MAPPATURA ( solo commenti , per documentazione )
- *
- * SLIDER HOME HERO     : .cc-sr-overlay .cc-sr-o-grad-top-strong
- * SLIDER PAGINA FAQ    : .cc-sr-overlay .cc-sr-o-solid-soft
- * SLIDER LANDING DARK  : .cc-sr-overlay .cc-sr-o-solid-strong
- * SLIDER LIGHT FOOTER  : .cc-sr-overlay .cc-sr-o-grad-bottom-soft
+ * SOLIDI
+ * =======================================================*/
+
+.cc-sr-o-solid-dark-soft   { --sr-overlay-top:.45; --sr-overlay-mid:.45; --sr-overlay-bottom:.45; }
+.cc-sr-o-solid-dark-medium { --sr-overlay-top:.65; --sr-overlay-mid:.65; --sr-overlay-bottom:.65; }
+.cc-sr-o-solid-dark-strong { --sr-overlay-top:.85; --sr-overlay-mid:.85; --sr-overlay-bottom:.85; }
+
+.cc-sr-o-solid-light-soft   { --sr-overlay-top:.30; --sr-overlay-mid:.30; --sr-overlay-bottom:.30; --sr-overlay-color-r:255; --sr-overlay-color-g:255; --sr-overlay-color-b:255; }
+.cc-sr-o-solid-light-medium { --sr-overlay-top:.50; --sr-overlay-mid:.50; --sr-overlay-bottom:.50; --sr-overlay-color-r:255; --sr-overlay-color-g:255; --sr-overlay-color-b:255; }
+.cc-sr-o-solid-light-strong { --sr-overlay-top:.70; --sr-overlay-mid:.70; --sr-overlay-bottom:.70; --sr-overlay-color-r:255; --sr-overlay-color-g:255; --sr-overlay-color-b:255; }
+
+/* =========================================================
+ * GRADIENT TOP → BOTTOM
+ * =======================================================*/
+
+.cc-sr-o-top-dark-soft   { --sr-overlay-direction:to bottom; --sr-overlay-top:.55; --sr-overlay-mid:.35; --sr-overlay-bottom:0; --sr-overlay-mid-pos:40%; }
+.cc-sr-o-top-dark-medium { --sr-overlay-direction:to bottom; --sr-overlay-top:.70; --sr-overlay-mid:.50; --sr-overlay-bottom:0; --sr-overlay-mid-pos:45%; }
+.cc-sr-o-top-dark-strong { --sr-overlay-direction:to bottom; --sr-overlay-top:.90; --sr-overlay-mid:.75; --sr-overlay-bottom:0; --sr-overlay-mid-pos:40%; }
+
+.cc-sr-o-top-light-soft   { --sr-overlay-direction:to bottom; --sr-overlay-top:.40; --sr-overlay-mid:.20; --sr-overlay-bottom:0; --sr-overlay-color-r:255; --sr-overlay-color-g:255; --sr-overlay-color-b:255; }
+.cc-sr-o-top-light-medium { --sr-overlay-direction:to bottom; --sr-overlay-top:.55; --sr-overlay-mid:.35; --sr-overlay-bottom:0; --sr-overlay-color-r:255; --sr-overlay-color-g:255; --sr-overlay-color-b:255; }
+.cc-sr-o-top-light-strong { --sr-overlay-direction:to bottom; --sr-overlay-top:.70; --sr-overlay-mid:.50; --sr-overlay-bottom:0; --sr-overlay-color-r:255; --sr-overlay-color-g:255; --sr-overlay-color-b:255; }
+
+/* =========================================================
+ * GRADIENT BOTTOM → TOP
+ * =======================================================*/
+
+.cc-sr-o-bottom-dark-soft   { --sr-overlay-direction:to top; --sr-overlay-top:.55; --sr-overlay-mid:.30; --sr-overlay-bottom:0; --sr-overlay-mid-pos:40%; }
+.cc-sr-o-bottom-dark-medium { --sr-overlay-direction:to top; --sr-overlay-top:.70; --sr-overlay-mid:.45; --sr-overlay-bottom:0; --sr-overlay-mid-pos:45%; }
+.cc-sr-o-bottom-dark-strong { --sr-overlay-direction:to top; --sr-overlay-top:.90; --sr-overlay-mid:.65; --sr-overlay-bottom:0; --sr-overlay-mid-pos:50%; }
+
+.cc-sr-o-bottom-light-soft   { --sr-overlay-direction:to top; --sr-overlay-top:.30; --sr-overlay-mid:.15; --sr-overlay-bottom:0; --sr-overlay-color-r:255; --sr-overlay-color-g:255; --sr-overlay-color-b:255; }
+.cc-sr-o-bottom-light-medium { --sr-overlay-direction:to top; --sr-overlay-top:.50; --sr-overlay-mid:.25; --sr-overlay-bottom:0; --sr-overlay-color-r:255; --sr-overlay-color-g:255; --sr-overlay-color-b:255; }
+.cc-sr-o-bottom-light-strong { --sr-overlay-direction:to top; --sr-overlay-top:.70; --sr-overlay-mid:.45; --sr-overlay-bottom:0; --sr-overlay-color-r:255; --sr-overlay-color-g:255; --sr-overlay-color-b:255; }
+
+/* =========================================================
+ * GRADIENT LEFT → RIGHT
+ * =======================================================*/
+
+.cc-sr-o-left-dark-soft   { --sr-overlay-direction:to right; --sr-overlay-top:.55; --sr-overlay-mid:.30; --sr-overlay-bottom:0; --sr-overlay-mid-pos:45%; }
+.cc-sr-o-left-dark-medium { --sr-overlay-direction:to right; --sr-overlay-top:.70; --sr-overlay-mid:.45; --sr-overlay-bottom:0; --sr-overlay-mid-pos:45%; }
+.cc-sr-o-left-dark-strong { --sr-overlay-direction:to right; --sr-overlay-top:.90; --sr-overlay-mid:.65; --sr-overlay-bottom:0; --sr-overlay-mid-pos:50%; }
+
+.cc-sr-o-left-light-soft   { --sr-overlay-direction:to right; --sr-overlay-top:.35; --sr-overlay-mid:.20; --sr-overlay-bottom:0; --sr-overlay-color-r:255; --sr-overlay-color-g:255; --sr-overlay-color-b:255; }
+.cc-sr-o-left-light-medium { --sr-overlay-direction:to right; --sr-overlay-top:.50; --sr-overlay-mid:.30; --sr-overlay-bottom:0; --sr-overlay-color-r:255; --sr-overlay-color-g:255; --sr-overlay-color-b:255; }
+.cc-sr-o-left-light-strong { --sr-overlay-direction:to right; --sr-overlay-top:.70; --sr-overlay-mid:.45; --sr-overlay-bottom:0; --sr-overlay-color-r:255; --sr-overlay-color-g:255; --sr-overlay-color-b:255; }
+
+/* =========================================================
+ * GRADIENT RIGHT → LEFT
+ * =======================================================*/
+
+.cc-sr-o-right-dark-soft   { --sr-overlay-direction:to left; --sr-overlay-top:.55; --sr-overlay-mid:.30; --sr-overlay-bottom:0; --sr-overlay-mid-pos:45%; }
+.cc-sr-o-right-dark-medium { --sr-overlay-direction:to left; --sr-overlay-top:.70; --sr-overlay-mid:.45; --sr-overlay-bottom:0; --sr-overlay-mid-pos:45%; }
+.cc-sr-o-right-dark-strong { --sr-overlay-direction:to left; --sr-overlay-top:.90; --sr-overlay-mid:.65; --sr-overlay-bottom:0; --sr-overlay-mid-pos:50%; }
+
+.cc-sr-o-right-light-soft   { --sr-overlay-direction:to left; --sr-overlay-top:.35; --sr-overlay-mid:.20; --sr-overlay-bottom:0; --sr-overlay-color-r:255; --sr-overlay-color-g:255; --sr-overlay-color-b:255; }
+.cc-sr-o-right-light-medium { --sr-overlay-direction:to left; --sr-overlay-top:.50; --sr-overlay-mid:.30; --sr-overlay-bottom:0; --sr-overlay-color-r:255; --sr-overlay-color-g:255; --sr-overlay-color-b:255; }
+.cc-sr-o-right-light-strong { --sr-overlay-direction:to left; --sr-overlay-top:.70; --sr-overlay-mid:.45; --sr-overlay-bottom:0; --sr-overlay-color-r:255; --sr-overlay-color-g:255; --sr-overlay-color-b:255; }
+
+/* =========================================================
+ * CENTER / VIGNETTE
+ * =======================================================*/
+
+.cc-sr-o-center-dark-soft   { --sr-overlay-top:0; --sr-overlay-mid:.55; --sr-overlay-bottom:0; --sr-overlay-mid-pos:50%; }
+.cc-sr-o-center-dark-strong { --sr-overlay-top:0; --sr-overlay-mid:.80; --sr-overlay-bottom:0; --sr-overlay-mid-pos:50%; }
+.cc-sr-o-center-light-soft  { --sr-overlay-top:0; --sr-overlay-mid:.45; --sr-overlay-bottom:0; --sr-overlay-mid-pos:50%; --sr-overlay-color-r:255; --sr-overlay-color-g:255; --sr-overlay-color-b:255; }
+
+/* =========================================================
+ * QUICK MAP
+ * HERO DARK     : cc-sr-overlay cc-sr-o-top-dark-strong
+ * HERO LIGHT    : cc-sr-overlay cc-sr-o-top-light-soft
+ * FOOTER DARK   : cc-sr-overlay cc-sr-o-bottom-dark-soft
+ * LAYOUT SIDE L : cc-sr-overlay cc-sr-o-left-dark-medium
+ * LAYOUT SIDE R : cc-sr-overlay cc-sr-o-right-dark-medium
+ * Puoi aggiungere nuovi colori “brand” con 3 righe in fondo, es.
+ * .cc-sr-o-brand { --sr-overlay-color-r: 221; --sr-overlay-color-g: 157; --sr-overlay-color-b: 87; }
+ * e combinarli subito con qualsiasi direzione / intensità.
  * =======================================================*/

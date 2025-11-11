@@ -4,45 +4,41 @@
 [![License](https://img.shields.io/badge/license-GPL--2.0%2B-green.svg)](LICENSE)
 [![Author](https://img.shields.io/badge/author-CodeCorn%E2%84%A2%20Technology-orange.svg)](https://github.com/CodeCornTech)
 
-Motore CSS a variabili per gestire **overlay globali** su Slider Revolution in modo DRY , leggibile e riutilizzabile .
+Motore CSS a variabili per gestire **overlay globali** su Slider Revolution in modo DRY, leggibile e riutilizzabile.
 
-Niente più copia incolla di 10 overlay diversi per ogni slider , ma :
+Niente più copia/incolla di 10 overlay diversi per ogni slider, ma:
 
 - una sola base CSS
-- preset pronti a classi
-- micro tuning per singolo modulo con le CSS variables
+- preset combinabili per direzione, tono e intensità
+- micro tuning via variabili CSS per slider specifico
 
 ---
 
-## Caratteristiche
+## ⚙️ Caratteristiche
 
 - Overlay sempre e solo sopra il background `rs-sbg-px`
-- Supporta video HTML5 , immagini statiche , parallax , ecc .
-- Preset pronti :
-  - solidi forti e soft
-  - gradient dall alto
-  - gradient dal basso
-  - vignette centrale
-- Completamente estendibile con CSS variables
-- Zero JS , solo CSS moderno
+- Supporta video HTML5, immagini statiche, parallax, ecc.
+- Direzioni disponibili: **top**, **bottom**, **left**, **right**, **center**, **solid**
+- Tono colore: **dark** o **light**
+- Intensità: **soft**, **medium**, **strong**
+- Completamente estendibile via CSS variables
+- Zero JS — solo CSS moderno, performante e mantenibile
 
 ---
 
-## Requisiti
+## 🧩 Requisiti
 
 - WordPress
-- Plugin Slider Revolution
-- Possibilità di aggiungere CSS personalizzato :
+- Plugin **Slider Revolution**
+- Possibilità di aggiungere CSS personalizzato:
   - tramite tema child
-  - oppure tramite pannello Custom CSS del tema o di SR
+  - oppure tramite il pannello _Custom CSS_ del tema o di SR
 
 ---
 
 ## 📦 Repository e struttura
 
 **GitHub:** [https://github.com/CodeCornTech/cc-revslider-overlay-engine](https://github.com/CodeCornTech/cc-revslider-overlay-engine)
-
-Struttura tipica se installato come MU-plugin:
 
 ```
 
@@ -56,192 +52,201 @@ mu-plugins/
 
 ```
 
+Oppure puoi copiare il file CSS nel tuo tema child.
+
 ---
 
-Oppure come CSS standalone nel tuo tema child.
+## 🚀 Installazione rapida
 
-## Installazione
+1️⃣ Copia il file `cc-sr-overlay.css` in  
+`wp-content/themes/tuo-tema-child/assets/css/`
 
-1 . Copia il file `cc-sr-overlay.css` dentro il tuo tema child , per esempio :
-
-```text
-wp-content/themes/tuo-tema-child/assets/css/cc-sr-overlay.css
-```
-
-2 . Enqueue del file nel `functions.php` del tema child :
+2️⃣ Enqueue del CSS nel `functions.php` del tema child:
 
 ```php
 function cc_revslider_overlay_assets() {
     wp_enqueue_style(
         'cc-sr-overlay',
         get_stylesheet_directory_uri() . '/assets/css/cc-sr-overlay.css',
-        array(),
+        [],
         '1.0.0'
     );
 }
-add_action( 'wp_enqueue_scripts' , 'cc_revslider_overlay_assets' );
+add_action('wp_enqueue_scripts', 'cc_revslider_overlay_assets');
 ```
-
-In alternativa , puoi incollare il contenuto del CSS direttamente in :
-
-- Customizer → CSS aggiuntivo
-- oppure nel pannello globale di Slider Revolution → Global Settings → Custom CSS
 
 ---
 
-## Utilizzo base
+## 🧱 Utilizzo base
 
-1 . Apri lo slider in Slider Revolution .
-2 . Vai su **Module General Options → Layout → CSS → Module Classes** .
-3 . Aggiungi le classi :
+1️⃣ Apri lo slider in **Slider Revolution**
+2️⃣ Vai in
+**Module General Options → Layout → CSS → Module Classes**
+3️⃣ Aggiungi le classi che definiscono **overlay + preset**
+
+Esempio:
 
 ```text
-cc-sr-overlay cc-sr-o-grad-top-strong
+cc-sr-overlay cc-sr-o-top-dark-strong
 ```
 
-Questo attiva :
+- `cc-sr-overlay` → attiva il motore overlay
+- `cc-sr-o-top-dark-strong` → preset: gradient dall’alto, nero intenso
 
-- il motore overlay (`cc-sr-overlay`)
-- il preset “gradient top strong” (`cc-sr-o-grad-top-strong`)
-
-L HTML generato sarà simile a :
+Risultato nel DOM:
 
 ```html
-<rs-module-wrap
-  id="rev_slider_11_1_wrapper"
-  class="cc-sr-overlay cc-sr-o-grad-top-strong"
->
-  <rs-module id="rev_slider_11_1"> ... </rs-module>
+<rs-module-wrap class="cc-sr-overlay cc-sr-o-top-dark-strong">
+  <rs-module> ... </rs-module>
 </rs-module-wrap>
 ```
 
-Il CSS è scritto in modo che funzioni sia se la classe è sul `wrap` , sia se è sul `rs-module` .
+Funziona sia sul `wrap` che sul `rs-module` stesso.
 
 ---
 
-## Preset disponibili
+## 🎨 Preset disponibili
 
-Tutti i preset si usano in coppia con `cc-sr-overlay` , per esempio :
+Ogni overlay è una combinazione logica:
+`cc-sr-overlay cc-sr-o-[direzione]-[tono]-[intensità]`
 
-```text
-cc-sr-overlay cc-sr-o-solid-strong
+### 🔸 Overlay solidi
+
+| Classe                       | Descrizione                              |
+| ---------------------------- | ---------------------------------------- |
+| `cc-sr-o-solid-dark-soft`    | Nero leggero, ideale per slider luminosi |
+| `cc-sr-o-solid-dark-medium`  | Nero medio, ottimo bilanciamento         |
+| `cc-sr-o-solid-dark-strong`  | Nero pieno, massima leggibilità          |
+| `cc-sr-o-solid-light-soft`   | Bianco velato, perfetto su sfondi scuri  |
+| `cc-sr-o-solid-light-strong` | Bianco pieno, effetto "lavagna"          |
+
+### 🔹 Gradient top → bottom
+
+| Classe                     | Effetto                                           |
+| -------------------------- | ------------------------------------------------- |
+| `cc-sr-o-top-dark-soft`    | Scuro in alto, sfuma delicato verso trasparente   |
+| `cc-sr-o-top-dark-medium`  | Nero più deciso, copertura 50%                    |
+| `cc-sr-o-top-dark-strong`  | Hero classico: nero in alto, trasparente in basso |
+| `cc-sr-o-top-light-soft`   | Bianco delicato in alto, per testi scuri          |
+| `cc-sr-o-top-light-strong` | Bianco intenso, per contrasti forti               |
+
+### 🔹 Gradient bottom → top
+
+| Classe                       | Effetto                                    |
+| ---------------------------- | ------------------------------------------ |
+| `cc-sr-o-bottom-dark-soft`   | Nero alla base, fade verso l’alto          |
+| `cc-sr-o-bottom-dark-medium` | Fondo deciso per testi ancorati in bottom  |
+| `cc-sr-o-bottom-dark-strong` | Hero invertito, nero in basso intenso      |
+| `cc-sr-o-bottom-light-soft`  | Luce bianca dal basso (effetto "riflesso") |
+
+### 🔹 Gradient laterali
+
+| Classe                      | Direzione                | Uso tipico                      |
+| --------------------------- | ------------------------ | ------------------------------- |
+| `cc-sr-o-left-dark-strong`  | da sinistra verso destra | per layout con testi a sinistra |
+| `cc-sr-o-right-dark-strong` | da destra verso sinistra | per layout con testi a destra   |
+| `cc-sr-o-left-light-soft`   | da sinistra verso destra | sfumatura chiara laterale       |
+| `cc-sr-o-right-light-soft`  | da destra verso sinistra | riflesso morbido a lato         |
+
+### 🔹 Vignette (centrale)
+
+| Classe                       | Descrizione                     |
+| ---------------------------- | ------------------------------- |
+| `cc-sr-o-center-dark-soft`   | centro scuro, bordi trasparenti |
+| `cc-sr-o-center-dark-strong` | vignetta più intensa            |
+| `cc-sr-o-center-light-soft`  | centro chiaro, per slider dark  |
+
+---
+
+## 🧠 Esempi pratici
+
+### 🔸 Hero principale (gradient top)
+
+```html
+cc-sr-overlay cc-sr-o-top-dark-strong
 ```
 
-### 1 . Overlay solidi
+Hero scuro in alto, ottimo per loghi e testi chiari.
 
-- `cc-sr-o-solid-strong`
-  Nero pieno , ideale per hero ultra leggibili .
+### 🔸 Slider chiaro con testo nero
 
-- `cc-sr-o-solid-soft`
-  Velatura leggera , lascia respirare il background .
+```html
+cc-sr-overlay cc-sr-o-bottom-light-soft
+```
 
-### 2 . Gradient dall alto
+Sfuma luce dal basso, crea contrasto con testo scuro.
 
-- `cc-sr-o-grad-top-strong`
-  Parte alta molto scura , sfuma a trasparente entro il 40 % .
+### 🔸 Overlay laterale per layout split
 
-- `cc-sr-o-grad-top-soft`
-  Stessa logica ma più delicata , perfetta per overlay sopra video con molta luce .
+```html
+cc-sr-overlay cc-sr-o-left-dark-medium
+```
 
-### 3 . Gradient dal basso
+Scurisce da sinistra a destra, utile in layout “image + text”.
 
-- `cc-sr-o-grad-bottom-soft`
-  Parte bassa più scura , ottimo per testi ancorati in bottom .
+### 🔸 Overlay solido neutro
 
-### 4 . Vignette centrale
+```html
+cc-sr-overlay cc-sr-o-solid-dark-soft
+```
 
-- `cc-sr-o-vignette`
-  Centro scuro , trasparente in alto e in basso , perfetto per focalizzare il centro di un hero .
+Velatura uniforme, mantiene profondità sul background.
 
 ---
 
-## Micro tuning per singolo slider
+## ⚡ Micro tuning per slider specifici
 
-Se vuoi cambiare leggermente un preset per uno slider specifico , non serve creare nuove classi .
-
-Puoi sovrascrivere le variabili CSS solo su quell ID .
-
-Esempio :
+Puoi personalizzare qualsiasi slider sovrascrivendo le variabili CSS:
 
 ```css
-/* Slider con ID rev_slider_11_1 , classe cc-sr-overlay */
 #rev_slider_11_1_wrapper.cc-sr-overlay {
   --sr-overlay-top: 0.9;
-  --sr-overlay-mid: 0.2;
-}
-```
-
-Oppure se la classe è sul modulo :
-
-```css
-#rev_slider_11_1.cc-sr-overlay {
-  --sr-overlay-top: 0.9;
-  --sr-overlay-mid: 0.2;
-}
-```
-
-Variabili principali disponibili :
-
-```css
---sr-overlay-top        /* opacità al 0 % del gradient */
---sr-overlay-mid        /* opacità alla posizione --sr-overlay-mid-pos */
---sr-overlay-bottom     /* opacità al 100 % */
---sr-overlay-mid-pos    /* posizione intermedia , es 40 % , 50 % , ecc . */
---sr-overlay-direction  /* to bottom , to top , ecc . */
---sr-overlay-color-r    /* componente R del colore */
---sr-overlay-color-g    /* componente G del colore */
---sr-overlay-color-b    /* componente B del colore */
-```
-
-Esempio overlay blu notte :
-
-```css
-.hero-slider-wrapper.cc-sr-overlay {
-  --sr-overlay-color-r: 10;
-  --sr-overlay-color-g: 20;
-  --sr-overlay-color-b: 40;
+  --sr-overlay-mid: 0.4;
+  --sr-overlay-color-r: 255;
+  --sr-overlay-color-g: 215;
+  --sr-overlay-color-b: 0; /* dorato */
 }
 ```
 
 ---
 
-## Esempi di mapping per progetto
-
-Solo come documentazione interna , puoi annotare dentro il CSS :
+## 🎛️ Variabili principali
 
 ```css
-/* SLIDER HOME HERO    : cc-sr-overlay cc-sr-o-grad-top-strong */
-/* SLIDER PAGINA FAQ   : cc-sr-overlay cc-sr-o-solid-soft       */
-/* SLIDER LANDING DARK : cc-sr-overlay cc-sr-o-solid-strong     */
+--sr-overlay-top        /* opacità a 0% */
+--sr-overlay-mid        /* opacità intermedia */
+--sr-overlay-bottom     /* opacità a 100% */
+--sr-overlay-mid-pos    /* posizione intermedia (es. 40%, 50%) */
+--sr-overlay-direction  /* to bottom | to top | to left | to right */
+--sr-overlay-color-r/g/b /* RGB base */
 ```
-
-Così tu o chiunque tocchi il progetto vede al volo cosa monta ogni slider senza aprire Slider Revolution .
 
 ---
 
-## Roadmap
+## 🗺️ Mapping progetto consigliato
 
-- Preset chiari per overlay bianchi e colorati
-- Snippet JS opzionale per togglare overlay via data attribute
-- Versione SCSS con mixin e map dei preset
-
-Pull request graditissime ✨
+```css
+/* SLIDER HOME HERO       : cc-sr-overlay cc-sr-o-top-dark-strong */
+/* SLIDER FAQ             : cc-sr-overlay cc-sr-o-solid-dark-soft */
+/* SLIDER LANDING DARK    : cc-sr-overlay cc-sr-o-bottom-dark-soft */
+/* SLIDER FOOTER LIGHT    : cc-sr-overlay cc-sr-o-top-light-soft */
+/* SLIDER SPLIT SINISTRO  : cc-sr-overlay cc-sr-o-left-dark-medium */
+/* SLIDER SPLIT DESTRO    : cc-sr-overlay cc-sr-o-right-dark-medium */
+```
 
 ---
 
 ## 🧩 Credits
 
-**Autore:** [Federico Girolami](https://github.com/FedericoGirolami)  
-**Team:** [CodeCorn™ Technology](https://github.com/CodeCornTech)  
-**Progetto:** CC Slider Revolution Overlay Engine  
+**Autore:** [Federico Girolami](https://github.com/FedericoGirolami)
+**Team:** [CodeCorn™ Technology](https://github.com/CodeCornTech)
+**Progetto:** CC Slider Revolution Overlay Engine
 **Repository:** [CodeCornTech/cc-revslider-overlay-engine](https://github.com/CodeCornTech/cc-revslider-overlay-engine)
 
 ---
 
 ## 🪪 Licenza
 
-Distribuito sotto licenza **GPL-2.0 o successiva**.  
-Puoi usarlo liberamente, modificarlo e ridistribuirlo, mantenendo il credito a **CodeCorn™ Technology**.  
+Distribuito sotto licenza **GPL-2.0 o successiva**.
+Puoi usarlo liberamente, modificarlo e ridistribuirlo mantenendo il credito a **CodeCorn™ Technology**.
 © 2025 — CodeCorn™ Technology. Tutti i diritti riservati.
-
----

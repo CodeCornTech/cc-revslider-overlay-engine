@@ -1,2 +1,5 @@
 TODO_*
 README_*
+/.vscode
+.DS_Store
+*V*.css
