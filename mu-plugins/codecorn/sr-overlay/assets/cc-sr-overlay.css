@@ -1,5 +1,5 @@
 /* =========================================================
- * CC Slider Revolution Overlay Engine
+ * CC Slider Revolution Overlay Engine + (Universal)
  * Autore  : CodeCorn™
  * Scopo   : Overlay modulare e DRY per Slider Revolution
  *
@@ -9,14 +9,10 @@
  * intensità  : soft | medium | strong
  * =======================================================*/
 
-/* BASE */
-.cc-sr-overlay rs-sbg-px,
-.cc-sr-overlay rs-sbg {
-  position: relative;
-  overflow: hidden;
-}
-
-.cc-sr-overlay {
+/* 1. SETUP VARIABILI (Default Condiviso) */
+/* Applicando le variabili a entrambi, mantieni la coerenza */
+.cc-sr-overlay,
+.cc-o-self {
   --sr-overlay-top: .75;
   --sr-overlay-mid: .40;
   --sr-overlay-bottom: 0;
@@ -27,8 +23,26 @@
   --sr-overlay-color-b: 0;
 }
 
+/* 2. SETUP SPECIFICO (Posizionamento) */
+
+/* A. Slider Revolution (Non tocchiamo nulla della logica SR) */
+.cc-sr-overlay rs-sbg-px,
+.cc-sr-overlay rs-sbg {
+  position: relative;
+  overflow: hidden;
+}
+
+/* B. Header / Generic (Il tuo codice nuovo) */
+.cc-o-self {
+  position: relative; /* Crea il contesto per l'absolute */
+  z-index: 1;         /* Crea stacking context: l'overlay (-1) non finirà dietro al body */
+}
+
+/* 3. GENERAZIONE DEL GRADIENTE (Unica Fonte di Verità) */
+/* Qui uniamo i selettori così la formula è scritta una volta sola */
 .cc-sr-overlay rs-sbg-px::before,
-.cc-sr-overlay rs-sbg::before {
+.cc-sr-overlay rs-sbg::before ,
+.cc-o-self::before {
   content: "";
   position: absolute;
   inset: 0;
@@ -38,8 +52,18 @@
     rgba(var(--sr-overlay-color-r), var(--sr-overlay-color-g), var(--sr-overlay-color-b), var(--sr-overlay-mid)) var(--sr-overlay-mid-pos),
     rgba(var(--sr-overlay-color-r), var(--sr-overlay-color-g), var(--sr-overlay-color-b), var(--sr-overlay-bottom)) 100%
   );
-  pointer-events: none;
-  z-index: 1;
+}
+/* 4. GESTIONE Z-INDEX (La vera differenza) */
+
+/* Caso A: SR vuole z-index positivo perché è dentro un container isolato */
+.cc-sr-overlay rs-sbg-px::before,
+.cc-sr-overlay rs-sbg::before {
+  z-index: 1; 
+}
+
+/* Caso B: Generic vuole z-index negativo per stare sotto al testo dell'header */
+.cc-o-self::before {
+  z-index: -1;
 }
 
 /* =========================================================

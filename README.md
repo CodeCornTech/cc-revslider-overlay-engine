@@ -1,28 +1,23 @@
 # CC Slider Revolution Overlay Engine
 
-[![Version](https://img.shields.io/badge/version-1.0.1-blue.svg)](https://github.com/CodeCornTech/cc-revslider-overlay-engine)
+[![Version](https://img.shields.io/badge/version-2.0.1-blue.svg)](https://github.com/CodeCornTech/cc-revslider-overlay-engine)
 [![License](https://img.shields.io/badge/license-GPL--2.0%2B-green.svg)](LICENSE)
 [![Author](https://img.shields.io/badge/author-CodeCorn%E2%84%A2%20Technology-orange.svg)](https://github.com/CodeCornTech)
 
-Motore CSS a variabili per gestire **overlay globali** su Slider Revolution in modo DRY, leggibile e riutilizzabile.
-
-Niente più copia/incolla di 10 overlay diversi per ogni slider, ma:
-
-- una sola base CSS
-- preset combinabili per direzione, tono e intensità
-- micro tuning via variabili CSS per slider specifico
+Motore CSS a variabili per gestire **overlay globali** su Slider Revolution in modo DRY, leggibile e riutilizzabile.  
+Progettato per essere **logico, scalabile e riusabile** tra più progetti WordPress.
 
 ---
 
 ## ⚙️ Caratteristiche
 
-- Overlay sempre e solo sopra il background `rs-sbg-px`
-- Supporta video HTML5, immagini statiche, parallax, ecc.
-- Direzioni disponibili: **top**, **bottom**, **left**, **right**, **center**, **solid**
-- Tono colore: **dark** o **light**
-- Intensità: **soft**, **medium**, **strong**
-- Completamente estendibile via CSS variables
-- Zero JS — solo CSS moderno, performante e mantenibile
+- Overlay sempre e solo sopra `rs-sbg-px`
+- Supporto completo: video, immagini, parallax, ecc.
+- Direzioni: **top**, **bottom**, **left**, **right**, **center**, **solid**
+- Toni: **dark** / **light**
+- Intensità: **soft** / **medium** / **strong**
+- Gestione tramite CSS variables — nessuno script JS
+- Compatibile con tema child, MU-plugin o Custom CSS di SR
 
 ---
 
@@ -30,15 +25,11 @@ Niente più copia/incolla di 10 overlay diversi per ogni slider, ma:
 
 - WordPress
 - Plugin **Slider Revolution**
-- Possibilità di aggiungere CSS personalizzato:
-  - tramite tema child
-  - oppure tramite il pannello _Custom CSS_ del tema o di SR
+- Accesso a CSS personalizzato (tema child o pannello SR)
 
 ---
 
-## 📦 Repository e struttura
-
-**GitHub:** [https://github.com/CodeCornTech/cc-revslider-overlay-engine](https://github.com/CodeCornTech/cc-revslider-overlay-engine)
+## 📦 Struttura plugin
 
 ```
 
@@ -52,16 +43,9 @@ mu-plugins/
 
 ```
 
-Oppure puoi copiare il file CSS nel tuo tema child.
-
 ---
 
-## 🚀 Installazione rapida
-
-1️⃣ Copia il file `cc-sr-overlay.css` in  
-`wp-content/themes/tuo-tema-child/assets/css/`
-
-2️⃣ Enqueue del CSS nel `functions.php` del tema child:
+## 🚀 Installazione
 
 ```php
 function cc_revslider_overlay_assets() {
@@ -77,134 +61,174 @@ add_action('wp_enqueue_scripts', 'cc_revslider_overlay_assets');
 
 ---
 
+## 🧱 Utilizzo Universale (Novità v1.1)
+
+Il motore ora supporta qualsiasi elemento HTML standard (Header, Section, Div) tramite la classe helper `.cc-o-self`.
+
+### Logica di implementazione
+
+- **Slider Revolution (`.cc-sr-overlay`)**: L'overlay viene iniettato con `z-index: 1` (sopra il bg `rs-sbg`, sotto i layer di testo).
+- **HTML Standard (`.cc-o-self`)**: L'overlay viene iniettato direttamente nell'elemento con `z-index: -1` per posizionarsi automaticamente sotto il contenuto (testo/bottoni) ma sopra il background.
+
+---
+
+### 🚀 Use Cases HTML (Scenario B)
+
+Per applicare gli overlay fuori dallo slider, usa la sintassi:
+`cc-o-self` + `[preset]`
+
+#### 1. Header Hero
+
+Overlay scuro dal basso per far risaltare il titolo bianco.
+
+```html
+<header class="site-header cc-o-self cc-sr-o-bottom-dark-medium">
+  <div class="container">
+    <h1>Titolo Header</h1>
+    <p>Il testo rimane selezionabile sopra l'overlay.</p>
+  </div>
+</header>
+```
+
+#### 2. Card o Box generico
+
+Vignettatura leggera su un div contenuto.
+
+```html
+<div class="my-card cc-o-self cc-sr-o-solid-dark-soft">
+  <h3>Titolo Card</h3>
+  <p>Contenuto della card...</p>
+</div>
+```
+
+---
+
 ## 🧱 Utilizzo base
 
 1️⃣ Apri lo slider in **Slider Revolution**
-2️⃣ Vai in
-**Module General Options → Layout → CSS → Module Classes**
-3️⃣ Aggiungi le classi che definiscono **overlay + preset**
-
-Esempio:
+2️⃣ Vai su **Module General Options → Layout → CSS → Module Classes**
+3️⃣ Aggiungi le classi:
 
 ```text
 cc-sr-overlay cc-sr-o-top-dark-strong
 ```
 
-- `cc-sr-overlay` → attiva il motore overlay
-- `cc-sr-o-top-dark-strong` → preset: gradient dall’alto, nero intenso
-
-Risultato nel DOM:
-
-```html
-<rs-module-wrap class="cc-sr-overlay cc-sr-o-top-dark-strong">
-  <rs-module> ... </rs-module>
-</rs-module-wrap>
-```
-
-Funziona sia sul `wrap` che sul `rs-module` stesso.
-
 ---
 
 ## 🎨 Preset disponibili
 
-Ogni overlay è una combinazione logica:
-`cc-sr-overlay cc-sr-o-[direzione]-[tono]-[intensità]`
+Ogni overlay si costruisce così:
+
+```
+cc-sr-overlay cc-sr-o-[posizione]-[tono]-[intensità]
+```
 
 ### 🔸 Overlay solidi
 
-| Classe                       | Descrizione                              |
-| ---------------------------- | ---------------------------------------- |
-| `cc-sr-o-solid-dark-soft`    | Nero leggero, ideale per slider luminosi |
-| `cc-sr-o-solid-dark-medium`  | Nero medio, ottimo bilanciamento         |
-| `cc-sr-o-solid-dark-strong`  | Nero pieno, massima leggibilità          |
-| `cc-sr-o-solid-light-soft`   | Bianco velato, perfetto su sfondi scuri  |
-| `cc-sr-o-solid-light-strong` | Bianco pieno, effetto "lavagna"          |
+| Classe                       | Descrizione    |
+| ---------------------------- | -------------- |
+| `cc-sr-o-solid-dark-soft`    | Nero velato    |
+| `cc-sr-o-solid-dark-medium`  | Nero medio     |
+| `cc-sr-o-solid-dark-strong`  | Nero pieno     |
+| `cc-sr-o-solid-light-soft`   | Bianco leggero |
+| `cc-sr-o-solid-light-strong` | Bianco intenso |
 
-### 🔹 Gradient top → bottom
+---
 
-| Classe                     | Effetto                                           |
-| -------------------------- | ------------------------------------------------- |
-| `cc-sr-o-top-dark-soft`    | Scuro in alto, sfuma delicato verso trasparente   |
-| `cc-sr-o-top-dark-medium`  | Nero più deciso, copertura 50%                    |
-| `cc-sr-o-top-dark-strong`  | Hero classico: nero in alto, trasparente in basso |
-| `cc-sr-o-top-light-soft`   | Bianco delicato in alto, per testi scuri          |
-| `cc-sr-o-top-light-strong` | Bianco intenso, per contrasti forti               |
+### 🔹 Gradient verticali
 
-### 🔹 Gradient bottom → top
+#### **Top → Bottom**
 
-| Classe                       | Effetto                                    |
-| ---------------------------- | ------------------------------------------ |
-| `cc-sr-o-bottom-dark-soft`   | Nero alla base, fade verso l’alto          |
-| `cc-sr-o-bottom-dark-medium` | Fondo deciso per testi ancorati in bottom  |
-| `cc-sr-o-bottom-dark-strong` | Hero invertito, nero in basso intenso      |
-| `cc-sr-o-bottom-light-soft`  | Luce bianca dal basso (effetto "riflesso") |
+| Classe                     | Descrizione               |
+| -------------------------- | ------------------------- |
+| `cc-sr-o-top-dark-soft`    | Nero delicato dall’alto   |
+| `cc-sr-o-top-dark-medium`  | Copertura media dall’alto |
+| `cc-sr-o-top-dark-strong`  | Nero deciso dall’alto     |
+| `cc-sr-o-top-light-soft`   | Bianco sfumato dall’alto  |
+| `cc-sr-o-top-light-medium` | Bianco medio dall’alto    |
+| `cc-sr-o-top-light-strong` | Bianco forte dall’alto    |
 
-### 🔹 Gradient laterali
+#### **Bottom → Top**
 
-| Classe                      | Direzione                | Uso tipico                      |
-| --------------------------- | ------------------------ | ------------------------------- |
-| `cc-sr-o-left-dark-strong`  | da sinistra verso destra | per layout con testi a sinistra |
-| `cc-sr-o-right-dark-strong` | da destra verso sinistra | per layout con testi a destra   |
-| `cc-sr-o-left-light-soft`   | da sinistra verso destra | sfumatura chiara laterale       |
-| `cc-sr-o-right-light-soft`  | da destra verso sinistra | riflesso morbido a lato         |
+| Classe                        | Descrizione               |
+| ----------------------------- | ------------------------- |
+| `cc-sr-o-bottom-dark-soft`    | Nero sfumato dal basso    |
+| `cc-sr-o-bottom-dark-medium`  | Copertura media dal basso |
+| `cc-sr-o-bottom-dark-strong`  | Nero intenso dal basso    |
+| `cc-sr-o-bottom-light-soft`   | Luce chiara dal basso     |
+| `cc-sr-o-bottom-light-medium` | Bianco medio dal basso    |
+| `cc-sr-o-bottom-light-strong` | Bianco intenso dal basso  |
+
+---
+
+### 🔹 Gradient orizzontali
+
+#### **Left → Right**
+
+| Classe                      | Descrizione                    |
+| --------------------------- | ------------------------------ |
+| `cc-sr-o-left-dark-soft`    | Scuro da sinistra verso destra |
+| `cc-sr-o-left-dark-medium`  | Copertura media sinistra       |
+| `cc-sr-o-left-dark-strong`  | Nero forte da sinistra         |
+| `cc-sr-o-left-light-soft`   | Chiaro da sinistra             |
+| `cc-sr-o-left-light-medium` | Bianco medio da sinistra       |
+| `cc-sr-o-left-light-strong` | Bianco intenso da sinistra     |
+
+#### **Right → Left**
+
+| Classe                       | Descrizione                    |
+| ---------------------------- | ------------------------------ |
+| `cc-sr-o-right-dark-soft`    | Scuro da destra verso sinistra |
+| `cc-sr-o-right-dark-medium`  | Copertura media da destra      |
+| `cc-sr-o-right-dark-strong`  | Nero forte da destra           |
+| `cc-sr-o-right-light-soft`   | Chiaro da destra               |
+| `cc-sr-o-right-light-medium` | Bianco medio da destra         |
+| `cc-sr-o-right-light-strong` | Bianco intenso da destra       |
+
+---
 
 ### 🔹 Vignette (centrale)
 
-| Classe                       | Descrizione                     |
-| ---------------------------- | ------------------------------- |
-| `cc-sr-o-center-dark-soft`   | centro scuro, bordi trasparenti |
-| `cc-sr-o-center-dark-strong` | vignetta più intensa            |
-| `cc-sr-o-center-light-soft`  | centro chiaro, per slider dark  |
+| Classe                       | Effetto                      |
+| ---------------------------- | ---------------------------- |
+| `cc-sr-o-center-dark-soft`   | Centro scuro, bordi chiari   |
+| `cc-sr-o-center-dark-strong` | Centro nero intenso          |
+| `cc-sr-o-center-light-soft`  | Centro chiaro su slider dark |
 
 ---
 
 ## 🧠 Esempi pratici
 
-### 🔸 Hero principale (gradient top)
-
 ```html
+<!-- Hero classico, nero forte in alto -->
 cc-sr-overlay cc-sr-o-top-dark-strong
-```
 
-Hero scuro in alto, ottimo per loghi e testi chiari.
-
-### 🔸 Slider chiaro con testo nero
-
-```html
+<!-- Footer chiaro con testo scuro -->
 cc-sr-overlay cc-sr-o-bottom-light-soft
-```
 
-Sfuma luce dal basso, crea contrasto con testo scuro.
-
-### 🔸 Overlay laterale per layout split
-
-```html
+<!-- Layout split con testo a sinistra -->
 cc-sr-overlay cc-sr-o-left-dark-medium
-```
 
-Scurisce da sinistra a destra, utile in layout “image + text”.
+<!-- Layout split inverso -->
+cc-sr-overlay cc-sr-o-right-dark-medium
 
-### 🔸 Overlay solido neutro
-
-```html
+<!-- Overlay uniforme morbido -->
 cc-sr-overlay cc-sr-o-solid-dark-soft
 ```
 
-Velatura uniforme, mantiene profondità sul background.
-
 ---
 
-## ⚡ Micro tuning per slider specifici
+## ⚙️ Micro tuning
 
-Puoi personalizzare qualsiasi slider sovrascrivendo le variabili CSS:
+Personalizza un singolo slider con variabili CSS:
 
 ```css
 #rev_slider_11_1_wrapper.cc-sr-overlay {
-  --sr-overlay-top: 0.9;
+  --sr-overlay-top: 0.85;
   --sr-overlay-mid: 0.4;
-  --sr-overlay-color-r: 255;
-  --sr-overlay-color-g: 215;
-  --sr-overlay-color-b: 0; /* dorato */
+  --sr-overlay-color-r: 221;
+  --sr-overlay-color-g: 157;
+  --sr-overlay-color-b: 87; /* brand gold */
 }
 ```
 
@@ -213,26 +237,42 @@ Puoi personalizzare qualsiasi slider sovrascrivendo le variabili CSS:
 ## 🎛️ Variabili principali
 
 ```css
---sr-overlay-top        /* opacità a 0% */
+--sr-overlay-top        /* opacità 0% (inizio gradient) */
 --sr-overlay-mid        /* opacità intermedia */
---sr-overlay-bottom     /* opacità a 100% */
---sr-overlay-mid-pos    /* posizione intermedia (es. 40%, 50%) */
---sr-overlay-direction  /* to bottom | to top | to left | to right */
---sr-overlay-color-r/g/b /* RGB base */
+--sr-overlay-bottom     /* opacità 100% */
+--sr-overlay-mid-pos    /* posizione (es. 40%, 50%) */
+--sr-overlay-direction  /* to bottom | top | left | right */
+--sr-overlay-color-r/g/b /* RGB del tono base */
 ```
 
 ---
 
-## 🗺️ Mapping progetto consigliato
+## 🗺️ Mapping progetto (esempio)
 
 ```css
-/* SLIDER HOME HERO       : cc-sr-overlay cc-sr-o-top-dark-strong */
-/* SLIDER FAQ             : cc-sr-overlay cc-sr-o-solid-dark-soft */
-/* SLIDER LANDING DARK    : cc-sr-overlay cc-sr-o-bottom-dark-soft */
-/* SLIDER FOOTER LIGHT    : cc-sr-overlay cc-sr-o-top-light-soft */
-/* SLIDER SPLIT SINISTRO  : cc-sr-overlay cc-sr-o-left-dark-medium */
-/* SLIDER SPLIT DESTRO    : cc-sr-overlay cc-sr-o-right-dark-medium */
+/* HERO PRINCIPALE      : cc-sr-overlay cc-sr-o-top-dark-strong */
+/* FOOTER CHIARO         : cc-sr-overlay cc-sr-o-bottom-light-soft */
+/* PAGINA FAQ            : cc-sr-overlay cc-sr-o-solid-dark-soft */
+/* LANDING DARK          : cc-sr-overlay cc-sr-o-bottom-dark-strong */
+/* SLIDER SINISTRO       : cc-sr-overlay cc-sr-o-left-dark-medium */
+/* SLIDER DESTRO         : cc-sr-overlay cc-sr-o-right-dark-medium */
 ```
+
+---
+
+## 🧮 Matrice combinazioni disponibili
+
+| Direzione  | Toni disponibili | Intensità disponibili  | Totale combinazioni |
+| ---------- | ---------------- | ---------------------- | ------------------- |
+| `solid`    | dark / light     | soft / medium / strong | 6                   |
+| `top`      | dark / light     | soft / medium / strong | 6                   |
+| `bottom`   | dark / light     | soft / medium / strong | 6                   |
+| `left`     | dark / light     | soft / medium / strong | 6                   |
+| `right`    | dark / light     | soft / medium / strong | 6                   |
+| `center`   | dark / light     | soft / strong          | 4                   |
+| **Totale** | —                | —                      | **34 preset reali** |
+
+> Tutti combinabili con varianti colore personalizzate via CSS variables (es. brand, accent, gold, blu).
 
 ---
 
