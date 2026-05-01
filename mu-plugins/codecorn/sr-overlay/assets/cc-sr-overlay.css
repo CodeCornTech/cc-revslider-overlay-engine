@@ -27,7 +27,8 @@
 
 /* A. Slider Revolution (Non tocchiamo nulla della logica SR) */
 .cc-sr-overlay rs-sbg-px,
-.cc-sr-overlay rs-sbg {
+.cc-sr-overlay rs-sbg,
+.cc-sr-overlay sr7-bg {
   position: relative;
   overflow: hidden;
 }
@@ -39,13 +40,15 @@
 }
 
 /* 3. GENERAZIONE DEL GRADIENTE (Unica Fonte di Verità) */
-/* Qui uniamo i selettori così la formula è scritta una volta sola */
-.cc-sr-overlay rs-sbg-px::before,
-.cc-sr-overlay rs-sbg::before ,
-.cc-o-self::before {
+/* Usiamo ::after invece di ::before per scavalcare gli elementi iniettati nel DOM */
+.cc-sr-overlay rs-sbg-px::after,
+.cc-sr-overlay rs-sbg::after,
+.cc-sr-overlay sr7-bg::after,
+.cc-o-self::after {
   content: "";
   position: absolute;
   inset: 0;
+  pointer-events: none; /* Fondamentale per far passare i click al video/slider sottostante */
   background: linear-gradient(
     var(--sr-overlay-direction),
     rgba(var(--sr-overlay-color-r), var(--sr-overlay-color-g), var(--sr-overlay-color-b), var(--sr-overlay-top)) 0%,
@@ -55,14 +58,28 @@
 }
 /* 4. GESTIONE Z-INDEX (La vera differenza) */
 
-/* Caso A: SR vuole z-index positivo perché è dentro un container isolato */
-.cc-sr-overlay rs-sbg-px::before,
-.cc-sr-overlay rs-sbg::before {
+/* Caso A: SR 6 only vuole z-index positivo perché è dentro un container isolato */
+/* .cc-sr-overlay rs-sbg-px::before,
+.cc-sr-overlay rs-sbg::before,
+.cc-sr-overlay sr7-bg::before {
   z-index: 1; 
+} */
+
+/* Caso A: SR7. Il canvas del video ha z-index:1. Il testo ha z-index:8. 
+   Mettiamo l'overlay a 5 così sta esattamente in mezzo. */
+.cc-sr-overlay rs-sbg-px::after,
+.cc-sr-overlay rs-sbg::after,
+.cc-sr-overlay sr7-bg::after {
+  z-index: 5; 
 }
 
+/* Caso B: RS6 ONLY Generic vuole z-index negativo per stare sotto al testo dell'header */
+/* .cc-o-self::before {
+  z-index: -1;
+} */
+
 /* Caso B: Generic vuole z-index negativo per stare sotto al testo dell'header */
-.cc-o-self::before {
+.cc-o-self::after {
   z-index: -1;
 }
 
